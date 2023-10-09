@@ -9,6 +9,7 @@ const { notFound, errorHandler } = require("./middlewares/errorHandler");
 
 const authRouter = require('./routes/authRoute');
 const productRouter = require("./routes/productRoute");
+const blogCategoryRouter = require("./routes/blogCategoryRoute");
 const blogRouter = require("./routes/blogRoute");
 
 const PORT = process.env.PORT || 4000;
@@ -21,6 +22,7 @@ app.use(morgan("dev"));
 
 app.use('/api/user', authRouter);
 app.use('/api/product', productRouter);
+app.use('/api/blog-category', blogCategoryRouter);
 app.use('/api/blog', blogRouter);
 
 
