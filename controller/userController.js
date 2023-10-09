@@ -15,6 +15,7 @@ const createUser = asyncHandler(
     }
 );
 
+//Login a User
 const loginUserController = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     //console.log(email,password);
@@ -33,4 +34,124 @@ const loginUserController = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports={ createUser, loginUserController }
+// Get all users
+const getAllUsers = asyncHandler(async (req, res) => {
+    try {
+        const getUsers = await User.find();
+        res.json(getUsers);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+// Get a single user
+const getSingleUser = asyncHandler(async (req, res) => {
+    const { id } = req.user;
+    //console.log(id);
+    // validateMongoDbId(id);
+    //
+    try {
+        const getOneUser = await User.findById(id);
+        res.json({
+            getOneUser,
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+// Delete User
+const deleteSingleUser = asyncHandler(async (req, res) => {
+    const { id } = req.user;
+    //validateMongoDbId(id);
+
+    try {
+        const deleteOneUser = await User.findByIdAndDelete(id);
+        res.json({
+            deleteOneUser,
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+// Update a user
+const updateSingleUser = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    //validateMongoDbId(_id);
+
+    try {
+        const updateOneUser = await User.findByIdAndUpdate(
+            _id,
+            {
+                firstname: req?.body?.firstname,
+                lastname: req?.body?.lastname,
+                email: req?.body?.email,
+                mobile: req?.body?.mobile,
+            },
+            {
+                new: true,
+            }
+        );
+        res.json(updateOneUser);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+// Block User
+const blockUser = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    //validateMongoDbId(id);
+
+    try {
+        const blockedUser = await User.findByIdAndUpdate(
+            id,
+            {
+                isBlocked: true,
+            },
+            {
+                new: true,
+            }
+        );
+        res.json(blockedUser);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+// unblock User
+const unblockUser = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    //validateMongoDbId(id);
+
+    try {
+        const unblock = await User.findByIdAndUpdate(
+            id,
+            {
+                isBlocked: false,
+            },
+            {
+                new: true,
+            }
+        );
+        res.json({
+            message: "User UnBlocked",
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+
+module.exports={
+    createUser,
+    loginUserController,
+    getAllUsers,
+    getSingleUser,
+    deleteSingleUser,
+    updateSingleUser,
+    blockUser,
+    unblockUser
+
+}
