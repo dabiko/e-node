@@ -10,9 +10,19 @@ const {
     deleteProduct,
     addToWishlist,
     rating,
+    uploadImages
 } = require("../controller/productController");
+const {uploadPhoto, productImgResize} = require("../middlewares/uploadImages");
 
 router.post("/", authMiddleware, isAdmin, createProduct);
+router.put(
+    "/upload/:id",
+    authMiddleware,
+    isAdmin,
+    uploadPhoto.array('images',10),
+    productImgResize,
+    uploadImages
+);
 router.get("/", getAllProducts);
 router.get("/:id", getSingleProduct);
 router.put("/wishlist", authMiddleware, addToWishlist);
