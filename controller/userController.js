@@ -4,7 +4,7 @@ const { generateToken } = require("../config/jwtToken");
 const validateMongoDbId = require("../utilities/validateMongodbId");
 const { generateRefreshToken } = require("../config/refreshToken");
 const crypto = require("crypto");
-const jwt = require("jsonwebtoken");
+//const jwt = require("jsonwebtoken");
 const sendEmail = require("./emailController");
 
 const createUser = asyncHandler(
@@ -57,7 +57,7 @@ const loginUserController = asyncHandler(async (req, res) => {
 // Get all users
 const getAllUsers = asyncHandler(async (req, res) => {
     try {
-        const getUsers = await User.find();
+        const getUsers = await User.find().populate("wishlist");
         res.json(getUsers);
     } catch (error) {
         throw new Error(error);
